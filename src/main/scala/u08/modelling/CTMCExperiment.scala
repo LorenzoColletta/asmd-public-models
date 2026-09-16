@@ -24,3 +24,29 @@ object CTMCExperiment:
       (0 until runs).count: _ =>
         bounded(timeBound)(prop)(self.newSimulationTrace(s0 ,rnd))
       .toDouble/runs
+
+    def globally[A](filt: A => Boolean): Property[A] =
+      trace => !eventually((s: A) => !filt(s))(trace)
+
+    def next[A](filt: A => Boolean): Property[A] =
+      trace => trace.drop(1).headOption.exists(e => filt(e.state))
+
+    def until[A](phi: A => Boolean, psi: A => Boolean): Property[A] =
+      trace => trace.dropWhile(e => phi(e.state) && !psi(e.state)).headOption.exists(e => psi(e.state))
+
+    private def timeFractionInState(filt: S => Boolean, s0: S, timeBound: Double)(using rnd: Random): Double =
+      @annotation.tailrec
+      def loop(trace: Trace[S], acc: Double): Double = trace match
+        case curr #:: next #:: _ if curr.time < timeBound && curr.time == next.time =>
+          acc + (if filt(curr.state) then timeBound - curr.time else 0.0)
+
+        case curr #:: next #:: tail if curr.time < timeBound =>
+          val addedTime = if filt(curr.state) then Math.min(next.time, timeBound) - curr.time else 0.0
+          loop(next #:: tail, acc + addedTime)
+
+        case _ => acc
+
+      loop(self.newSimulationTrace(s0, rnd), 0.0) / timeBound
+
+    def steadyStateExperiment(runs: Int, filt: S => Boolean, s0: S, timeBound: Double)(using rnd: Random): Double =
+      (0 until runs).iterator.map(_ => self.timeFractionInState(filt, s0, timeBound)).sum / runs
