@@ -1,6 +1,5 @@
 package u06.examples
 
-export u06.modelling.PetriNet
 import u06.utils.MSet
 
 object PNReadersWriters:
@@ -14,7 +13,7 @@ object PNReadersWriters:
   export u06.utils.MSet
 
   // DSL-like specification of a Petri Net
-  def pnME = PetriNet[Place](
+  def pnRaW = PetriNet[Place](
     MSet(P1) ~~> MSet(P2),
     MSet(P2) ~~> MSet(P3),
     MSet(P2) ~~> MSet(P4),
@@ -27,4 +26,4 @@ object PNReadersWriters:
 @main def mainPNReadersWriters =
   import PNReadersWriters.*
   // example usage
-  println(pnME.paths(MSet(P1,P1,P5),15).toList.mkString("\n"))
+  println(pnRaW.paths(MSet(P1,P1,P5),15).toList.mkString("\n"))

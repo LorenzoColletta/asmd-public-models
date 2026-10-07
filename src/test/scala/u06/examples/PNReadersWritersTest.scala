@@ -8,7 +8,7 @@ import u06.examples.PNReadersWriters.*
 class PNReadersWritersTest extends AnyFunSuite:
 
   def reachableStates(initial: MSet[Place], depth: Int): Set[MSet[Place]] =
-    pnME.paths(initial, depth).flatten.toSet
+    pnRaW.paths(initial, depth).flatten.toSet
 
   test("Readers can access concurrently to P6"):
     val initial = MSet(P1, P1, P1, P5)
@@ -36,5 +36,5 @@ class PNReadersWritersTest extends AnyFunSuite:
   test("Absence of deadlock"):
     val initial = MSet(P1, P1, P5)
 
-    val completePaths = pnME.completePathsUpToDepth(initial, depth = 12)
+    val completePaths = pnRaW.completePathsUpToDepth(initial, depth = 12)
     assert(completePaths.isEmpty, "Normal form found.")
