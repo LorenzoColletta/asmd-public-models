@@ -8,7 +8,7 @@ This repository contains the implamentations of the following tasks:
 
 - Lab08: Prism-vs-Scala
 
-- Lab08: Design by Q-learning
+- Lab09: Design by Q-learning
 
 ## About Lab08: Readers & Writers Stochastic Petri Net Analysis with PRISM
 
@@ -16,9 +16,9 @@ This repository contains the implamentations of the following tasks:
 
 ### Paths
 
-* **Modello PRISM**: `/prism/ReadersWriters.prism`
-* **Grafico Bounded Reachability**: `/prism/reachability.jpeg`
-* **Log delle Probabilità Steady-State**: `/prism/steady-state-log.txt`
+* **PRISM Model**: `/prism/ReadersWriters.prism`
+* **Bounded Reachability Graph**: `/prism/reachability.jpeg`
+* **Steady-State Probability Log**: `/prism/steady-state-log.txt`
 
 ---
 
