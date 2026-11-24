@@ -3,9 +3,9 @@ package scala.u07.examples
 import u07.utils.Time
 import java.util.Random
 import u07.examples.StochasticChannel.*
-import scala.u07.utils.TraceAnalytics.{takeUntil,averageTimeTo, averageRelativeTime}
+import scala.u07.utils.TraceAnalytics.{takeWhileInclusive,averageTimeTo, averageRelativeTime}
 
-@main def mainTimedStochasticChannelSimulation =
+@main def mainTimedStochasticChannelSimulation(): Unit =
   val nRuns = 1000
   val rnd = new Random()
 
@@ -13,7 +13,7 @@ import scala.u07.utils.TraceAnalytics.{takeUntil,averageTimeTo, averageRelativeT
 
   Time.timed:
     val runs: List[Trace[State]] = (1 to nRuns).map(_ =>
-      stocChannel.newSimulationTrace(IDLE, rnd).takeUntil(_.state != DONE)
+      stocChannel.newSimulationTrace(IDLE, rnd).takeWhileInclusive(_.state != DONE)
     ).toList
 
     val avgDoneTime = runs.averageTimeTo(DONE)
@@ -21,6 +21,3 @@ import scala.u07.utils.TraceAnalytics.{takeUntil,averageTimeTo, averageRelativeT
 
     val failPercentage = runs.averageRelativeTime(FAIL, DONE)
     println(f"Relative amount of time the system is in FAIL until DONE (Rate): $failPercentage%f%%")
-
-    print:
-      runs.mkString("\n")
